@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>Matador de Monstros</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet"> <!--Link da fonte Montserrat-->
+    <script src="https:unpkg.com/vue@2"></script> 
+</head>
+<body>
+    <div id="app">
+        <div class="panel scores">
+            <div class="score"> <!-- Score do jogador -->
+                <h1>Jogador</h1>
+                <div class="life-bar"> <!-- O life bar vai ser exatamente a barra de vida-->
+                    <div class="life"
+                        :class="{danger: playerLife < 20}"
+                        :style="{width:playerLife + '%'}"></div> <!--Essa div interna vai comportar o progresso  da vida em porcentagem. Asociar a classe danger quando a vida do jogador for menor que 20%. Além disso vou associar o style ou seja o tamanho do style para se refletir ao player life só que usando a unidade de percentual-->
+                </div>
+                <div>{{ playerLife }}%</div> <!--Percentual da vida do jogador -->
+            </div>
+            <div class="score"> <!-- Score do monstro -->
+                <h1>Monstro</h1>
+                <div class="life-bar"> 
+                    <div class="life"
+                        :class="{danger: monsterLife < 20}"
+                        :style="{width:monsterLife + '%'}"></div>
+                </div>
+                <div>{{ monsterLife }}%</div> <!--Percentual da vida do monstro -->
+            </div>
+        </div>
+        <div v-if="hasResult" class="panel result"> <!--Só vai aparcer esse painel se tiver resultado-->
+            <div v-if="monsterLife == 0" class="win">Você ganhou!!! :)</div>
+            <div v-if="playerLife == 0" class="lose">Você perdeu :(</div>
+        </div>
+        <div class="panel buttons">
+            <template v-if="running">
+                <button @click="attack(false)" class="btn attack">Ataque</button>
+                <button @click = "attack(true)" class="btn especial-attack">Ataque Especial</button>
+                <button @click= "healAndHurt()" class="btn heal">Curar</button>
+                <button @click="running = false" class="btn give-up">Desistir</button>
+            </template>
+            <button v-else @click="startGame" class="btn new-game">Iniciar Novo Jogo</button>
+        </div>
+        <div v-if="logs.length" 
+        class="panel logs">
+        <ul>
+            <li v-for="log in logs" 
+                :class ="log.cls"
+                class="log">{{ log.text }}</li>
+        </ul>
+        </div> <!--logs.length verifica se o vetor esta vazio-->
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
